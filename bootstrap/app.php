@@ -12,7 +12,10 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        // Vercel bertindak sebagai proxy di depan aplikasi. Kita perlu
+        // percaya semua proxy supaya Laravel tahu request aslinya HTTPS
+        // (lewat header X-Forwarded-Proto), bukan menganggapnya HTTP biasa.
+        $middleware->trustProxies(at: '*');
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(
