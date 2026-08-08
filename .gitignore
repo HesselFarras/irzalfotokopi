@@ -27,3 +27,5 @@ Thumbs.db
 /bootstrap/cache/*.php
 !/bootstrap/cache/.gitignore
 /storage/*.key
+.vercel
+.env*
