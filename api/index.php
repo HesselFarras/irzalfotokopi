@@ -1,7 +1,7 @@
 <?php
 
-// 1. Siapkan folder temporary di /tmp Vercel
-$storageFolders = [
+// Buat folder temporary wajib di /tmp Vercel
+$folders = [
     '/tmp/storage/framework/views',
     '/tmp/storage/framework/data',
     '/tmp/storage/framework/sessions',
@@ -10,16 +10,25 @@ $storageFolders = [
     '/tmp/bootstrap/cache',
 ];
 
-foreach ($storageFolders as $folder) {
+foreach ($folders as $folder) {
     if (!is_dir($folder)) {
         mkdir($folder, 0755, true);
     }
 }
 
-// 2. Override konfigurasi Laravel ke /tmp dan log ke stderr
-putenv('APP_STORAGE_PATH=/tmp/storage');
-putenv('VIEW_COMPILED_PATH=/tmp/storage/framework/views');
-putenv('LOG_CHANNEL=stderr');
-putenv('SESSION_DRIVER=cookie');
+// Inisialisasi Aplikasi Laravel
+$app = require_once __DIR__ . '/../bootstrap/app.php';
 
-require __DIR__ . '/../public/index.php';
+// Override Storage Path ke /tmp
+$app->useStoragePath('/tmp/storage');
+
+// Jalankan Kernel HTTP
+$kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
+
+$response = $kernel->handle(
+    $request = Illuminate\Http\Request::capture()
+);
+
+$response->send();
+
+$kernel->terminate($request, $response);
