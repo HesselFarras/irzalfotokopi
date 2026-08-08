@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Str;
 use Pdo\Mysql;
-use PDO;
 
 return [
 
