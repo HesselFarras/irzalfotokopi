@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Str;
 use Pdo\Mysql;
+use PDO;
 
 return [
 
@@ -97,6 +98,12 @@ return [
             'prefix_indexes' => true,
             'search_path' => 'public',
             'sslmode' => env('DB_SSLMODE', 'prefer'),
+            // Diperlukan karena pakai Supabase Transaction Pooler (PgBouncer, port 6543).
+            // PgBouncer mode transaction tidak mendukung server-side prepared statements,
+            // jadi kita paksa PDO untuk emulate di sisi client.
+            'options' => [
+                PDO::ATTR_EMULATE_PREPARES => true,
+            ],
         ],
 
         'sqlsrv' => [
