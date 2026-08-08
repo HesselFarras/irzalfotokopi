@@ -1,6 +1,9 @@
 <?php
 
-// Buat folder temporary wajib di /tmp Vercel
+// 1. Require Composer Autoloader terlebih dahulu (WAJIB)
+require __DIR__ . '/../vendor/autoload.php';
+
+// 2. Siapkan folder temporary di /tmp Vercel (karena serverless bersifat Read-Only)
 $folders = [
     '/tmp/storage/framework/views',
     '/tmp/storage/framework/data',
@@ -16,13 +19,13 @@ foreach ($folders as $folder) {
     }
 }
 
-// Inisialisasi Aplikasi Laravel
+// 3. Bootstrapping Aplikasi Laravel
 $app = require_once __DIR__ . '/../bootstrap/app.php';
 
-// Override Storage Path ke /tmp
+// 4. Override Storage Path ke /tmp
 $app->useStoragePath('/tmp/storage');
 
-// Jalankan Kernel HTTP
+// 5. Jalankan Kernel HTTP
 $kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
 
 $response = $kernel->handle(
